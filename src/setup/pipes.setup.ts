@@ -1,0 +1,49 @@
+/*Импортируем "INestApplication" для типизации экземпляров приложения NestJS.*/
+import { BadRequestException, INestApplication, ValidationPipe } from '@nestjs/common';
+import { ValidationError } from 'class-validator';
+import { ErrorMessageType, ErrorsMessagesType } from '../core/validation/types/errors-messages.type';
+
+/*Функция для настройки pipes в приложении.*/
+export function pipesSetup(app: INestApplication): void {
+  /*Регистрируем pipes глобально, то есть для всех контроллеров и всех запросов.*/
+  app.useGlobalPipes(
+    /*Pipe "ValidationPipe" - это встроенный в NestJS pipe, отвечающий за валидацию входящих данных.*/
+    new ValidationPipe({
+      /*Опция "transform: true" превращает сырые входные JavaScript-данные в экземпляр класса, который указан как input
+      DTO в методах контроллера.
+
+      В случае метода "getAll()" в "UsersController" NestJS при помощи библиотеки class-transformer создаст экземпляр
+      класса "GetUsersQueryParams", то есть примерно будет выполнено "new GetUsersQueryParams()". Таким образом в метод
+      "getAll()" query-репозитория "usersQueryRepository" можно будет передать параметр "query", который помимо свойств,
+      еще будет иметь и полезные методы.
+
+      Также эта опция нужна для работы декоратора "@Transform()" из библиотеки class-transformer.*/
+      transform: true,
+      /*Опция "whitelist: true" удаляет из запроса поля, которых нет в input DTO.*/
+      whitelist: true,
+      /*Опция "stopAtFirstError: true" останавливает валидацию поля после первой ошибки.*/
+      stopAtFirstError: true,
+      /*Опция "exceptionFactory" указывает на функцию, которая перехватывает процесс создания ошибки валидации
+      библиотекой class-validator и может:
+      1. Изменить структуру ответа.
+      2. Изменить статус-код.
+      3. Логировать ошибки валидации перед тем, как отправить их клиенту.*/
+      exceptionFactory: (errors: ValidationError[]): never => {
+        /*Перебираем ошибки валидации.*/
+        const errorsForResponse: ErrorsMessagesType = errors.map((error: ValidationError): ErrorMessageType => {
+          /*Так как включена опция "stopAtFirstError: true", то для каждого поля будет только одна ошибка. Внутри
+          свойства "constraints" объекта с ошибкой валидации лежит пара "Название декоратора: Текст ошибки".*/
+          const constraints: Record<string, string> = error.constraints || {};
+          /*Получаем имя декоратора валидации, в котором была ошибка.*/
+          const validationDecoratorName: string = Object.keys(constraints)[0];
+          /*Формируем объект ошибки в формате "ErrorMessageType".*/
+          return { field: error.property, message: constraints[validationDecoratorName] };
+        });
+
+        /*Выбрасываем исключение для перехвата NestJS, который в свою очередь отправит клиенту ответ со статусом 400 и
+        объектом с ошибками валидации.*/
+        throw new BadRequestException({ errorsMessages: errorsForResponse });
+      },
+    })
+  );
+}

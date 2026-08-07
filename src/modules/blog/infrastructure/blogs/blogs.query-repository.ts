@@ -1,0 +1,52 @@
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { QueryFilter } from 'mongoose';
+import { GetBlogListQueryInputDTO } from '../../api/blogs/input-dto/query/get-blog-list-query.input-dto';
+import { Blog } from '../../domain/blogs/blog.entity';
+import { BlogDocumentType } from '../../domain/blogs/document-types/blog.document-type';
+import { BlogListDocumentType } from '../../domain/blogs/document-types/blog-list.document-type';
+import type { BlogModelType } from '../../domain/blogs/model-types/blog.model-type';
+
+/*Query-репозиторий для блогов.*/
+@Injectable()
+export class BlogsQueryRepository {
+  constructor(@InjectModel(Blog.name) private BlogModel: BlogModelType) {}
+
+  /*Метод для поиска блога по ID в БД.*/
+  async findById(id: string): Promise<BlogDocumentType | null> {
+    /*Просим модель "BlogModel" найти блог по ID в БД.*/
+    return this.BlogModel.findOne({ _id: id, deletedAt: null });
+  }
+
+  /*Метод для поиска блогов в БД.*/
+  async findAll(queryDTO: GetBlogListQueryInputDTO): Promise<{ items: BlogListDocumentType; totalCount: number }> {
+    /*Переменная "skip" обозначает сколько записей надо пропустить перед тем, как начать отдавать запрошенную страницу
+    "pageNumber".*/
+    const skip: number = queryDTO.calculateSkip();
+    /*Динамически собираем фильтр для поиска в MongoDB. Начинаем с пустого фильтра если используем hard удаление, либо
+    с "deletedAt: null", если используем soft удаление.*/
+    const filter: QueryFilter<BlogDocumentType> = { deletedAt: null };
+    /*Если в query-параметрах было указано имя блога, то добавляем условие по полю "name".
+    "$regex: query.searchNameTerm" означает поиск по шаблону - по вхождению строки. "$options: 'i'" означает, что поиск
+    будет без учета регистра.*/
+    if (queryDTO.searchNameTerm) filter.name = { $regex: queryDTO.searchNameTerm, $options: 'i' };
+
+    /*Просим модель "BlogModel" найти блоги в БД:
+    1. ".find(filter)": выбираем документы по собранному фильтру.
+    2. ".sort({ [queryDTO.sortBy]: queryDTO.sortDirection })": сортируем по полю сортировки, которое берется
+    динамически из свойства "queryDTO.sortBy", а направление сортировки из свойства "queryDTO.sortDirection".
+    3. ".skip(skip)": пропускаем нужное количество записей, чтобы взять записи для запрошенной страницы.
+    4. ".limit(queryDTO.pageSize)": берем записей не больше размера запрошенной страницы.*/
+    const [items, totalCount]: [BlogListDocumentType, number] = await Promise.all([
+      this.BlogModel.find(filter)
+        .sort({ [queryDTO.sortBy]: queryDTO.sortDirection })
+        .skip(skip)
+        .limit(queryDTO.pageSize),
+      /*Просим модель "BlogModel" подсчитать общее количество документов, подходящих под фильтр, без учета пагинации.*/
+      this.BlogModel.countDocuments(filter),
+    ]);
+
+    /*Возвращаем данные по блогам.*/
+    return { items, totalCount };
+  }
+}

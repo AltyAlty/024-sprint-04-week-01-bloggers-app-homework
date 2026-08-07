@@ -1,6 +1,12 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { SETTINGS } from './core/settings/settings';
+import { BlogModule } from './modules/blog/blog.module';
 
-@Module({ imports: [], controllers: [AppController], providers: [AppService] })
+/*Главный модуль приложения. Обязателен.*/
+@Module({
+  imports: [MongooseModule.forRoot(SETTINGS.MONGO_URL), BlogModule],
+  controllers: [],
+  providers: [],
+})
 export class AppModule {}
