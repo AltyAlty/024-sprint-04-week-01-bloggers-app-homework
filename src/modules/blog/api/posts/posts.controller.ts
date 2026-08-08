@@ -49,10 +49,10 @@ export class PostsController {
   }
 
   /*004. GET-запрос по поиску комментариев с пагинацией по ID поста, используя query-параметры.*/
-  @ApiParam({ name: 'id' })
+  @ApiParam({ name: 'postId' })
   @Get(SETTINGS.GET_COMMENT_LIST_BY_POST_ID_PATH)
   async getCommentListByPostId(
-    @Param('id') id: string,
+    @Param('postId') id: string,
     @Query() query: GetCommentListByPostIdQueryInputDTO
   ): Promise<PaginationMetaDataOutputDTO<CommentListOutputDTO>> {
     /*Просим query-сервис "commentsQueryService" найти комментарии по ID поста.*/

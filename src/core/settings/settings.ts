@@ -20,11 +20,14 @@ export const SETTINGS = {
   UPDATE_POST_BY_ID_PATH: ':id',
   DELETE_POST_BY_ID_PATH: ':id',
 
-  COMMENTS_PREFIX: 'posts',
+  COMMENTS_PREFIX: 'comments',
   GET_COMMENT_BY_ID_PATH: ':id',
 
   USERS_PREFIX: 'users',
   CREATE_USER_PATH: '',
   GET_USER_LIST_PATH: '',
-  DELETE_USER_BY_ID_PATH: '/:id',
+  DELETE_USER_BY_ID_PATH: ':id',
+
+  TESTING_PREFIX: 'testing',
+  CLEAR_DB_PATH: 'all-data',
 };

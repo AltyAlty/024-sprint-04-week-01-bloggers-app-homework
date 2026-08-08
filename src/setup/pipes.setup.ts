@@ -19,6 +19,10 @@ export function pipesSetup(app: INestApplication): void {
 
       Также эта опция нужна для работы декоратора "@Transform()" из библиотеки class-transformer.*/
       transform: true,
+      /*Опция "exposeDefaultValues: true" заставляет библиотеку class-transformer принудительно подставлять значения по
+      умолчанию из свойств класса input DTO, например, "pageNumber: number = 1", если клиент не передал эти параметры в
+      запросе.*/
+      transformOptions: { exposeDefaultValues: true },
       /*Опция "whitelist: true" удаляет из запроса поля, которых нет в input DTO.*/
       whitelist: true,
       /*Опция "stopAtFirstError: true" останавливает валидацию поля после первой ошибки.*/

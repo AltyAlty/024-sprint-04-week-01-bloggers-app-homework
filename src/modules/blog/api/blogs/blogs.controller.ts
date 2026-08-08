@@ -37,10 +37,13 @@ export class BlogsController {
   }
 
   /*002. POST-запрос по созданию поста в блоге.*/
-  @ApiParam({ name: 'id' })
+  @ApiParam({ name: 'blogId' })
   @Post(SETTINGS.CREATE_POST_FOR_BLOG_PATH)
   @HttpCode(HttpStatus.CREATED)
-  async createPostForBlog(@Param('id') id: string, @Body() body: CreatePostForBlogInputDTO): Promise<PostOutputDTO> {
+  async createPostForBlog(
+    @Param('blogId') id: string,
+    @Body() body: CreatePostForBlogInputDTO
+  ): Promise<PostOutputDTO> {
     /*Просим сервис "postsService" создать пост в блоге.*/
     const postId: string = await this.postsService.createForBlog(body, id);
     /*Просим сервис "postsService" найти созданный пост по ID.*/
@@ -64,10 +67,10 @@ export class BlogsController {
   }
 
   /*005. GET-запрос по поиску постов с пагинацией по ID блога, используя query-параметры.*/
-  @ApiParam({ name: 'id' })
+  @ApiParam({ name: 'blogId' })
   @Get(SETTINGS.GET_POST_LIST_BY_BLOG_ID_PATH)
   async getPostListByBlogId(
-    @Param('id') id: string,
+    @Param('blogId') id: string,
     @Query() query: GetPostListByBlogIdQueryInputDTO
   ): Promise<PaginationMetaDataOutputDTO<PostListOutputDTO>> {
     /*Просим query-сервис "postsQueryService" найти посты по ID блога.*/

@@ -11,8 +11,14 @@ export class Argon2Service {
       timeCost: 3,
       outputLen: 32,
       parallelism: 4,
-      algorithm: 2 as Algorithm,
-      version: 0x13 as Version,
+      /*Опция "isolatedModules: true" в файле "tsconfig.json" конфликтует с ситуацией, когда в экспортируемых
+      библиотеках настройки типизируют через enum. В данном случае можно:
+      1. Убрать опцию "isolatedModules: true".
+      2. Использовать стандартную библиотеку Argon2.
+      3. Изменить код в текущей библиотеке для Argon2.
+      4. Не указывать эти настройки, использую те, что по умолчанию.*/
+      // algorithm: Algorithm.Argon2id,
+      // version: Version.V0x13,
     });
   }
 

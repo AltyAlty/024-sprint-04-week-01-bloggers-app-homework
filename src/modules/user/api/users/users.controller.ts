@@ -10,7 +10,7 @@ import { UserListOutputDTO } from './output-dto/user-list.output-dto';
 import { SETTINGS } from '../../../../core/settings/settings';
 
 /*Контроллер для постов.*/
-@Controller(SETTINGS.POSTS_PREFIX)
+@Controller(SETTINGS.USERS_PREFIX)
 export class UsersController {
   constructor(
     private usersService: UsersService,
