@@ -52,10 +52,10 @@ pnpm add -D typescript@6.0.3 @types/express jest ts-jest @types/jest @types/node
 12. Установка MongoDB Memory Server: pnpm add -D mongodb-memory-server
 13. Установка date-fns: pnpm add date-fns
 14. Установка eslint-plugin-simple-import-sort: pnpm add -D eslint-plugin-simple-import-sort
-Далее пока не установлены:
 15. Установка bcrypt: pnpm add bcrypt
 16. Установка типов для bcrypt: pnpm add -D @types/bcrypt
 17. Установка @node-rs/argon2: pnpm add @node-rs/argon2
+Далее пока не установлены:
 18. Установка nodemailer: pnpm add nodemailer
 19. Установка типов для nodemailer: pnpm add -D @types/nodemailer
 20. Установка cookie-parser: pnpm add cookie-parser

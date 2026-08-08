@@ -47,6 +47,5 @@ import { PostLikeData, PostLikeDataSchema } from './domain/posts/post-like-data.
     CommentsRepository,
     CommentsQueryRepository,
   ],
-  exports: [],
 })
 export class BlogModule {}

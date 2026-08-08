@@ -23,7 +23,7 @@ export class PostsController {
   ) {}
 
   /*001. POST-запрос по созданию поста.*/
-  @Post()
+  @Post(SETTINGS.CREATE_POST_PATH)
   @HttpCode(HttpStatus.CREATED)
   async createPost(@Body() body: CreatePostInputDTO): Promise<PostOutputDTO> {
     /*Просим сервис "postsService" создать пост.*/
@@ -42,7 +42,7 @@ export class PostsController {
   }
 
   /*003. GET-запрос по поиску постов с пагинацией, используя query-параметры.*/
-  @Get()
+  @Get(SETTINGS.GET_POST_LIST_PATH)
   async getPostList(@Query() query: GetPostListQueryInputDTO): Promise<PaginationMetaDataOutputDTO<PostListOutputDTO>> {
     /*Просим query-сервис "postsQueryService" найти посты.*/
     return await this.postsQueryService.findAll(query);

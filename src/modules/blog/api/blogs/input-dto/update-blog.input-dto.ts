@@ -15,6 +15,8 @@ export class UpdateBlogInputDTO {
   @Length(1, 500, { message: 'Field "description" must be between 1 and 500 characters' })
   description: string;
 
+  @IsString({ message: 'Field "websiteUrl" must be a string' })
+  @Transform(({ value }: { value: string }): string => value?.trim())
   @IsNotEmpty({ message: 'Field "websiteUrl" must not be empty' })
   @Length(5, 100, { message: 'Field "websiteUrl" must be between 5 and 100 characters' })
   @Matches(/^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/, {

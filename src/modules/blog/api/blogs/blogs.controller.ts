@@ -27,7 +27,7 @@ export class BlogsController {
   ) {}
 
   /*001. POST-запрос по созданию блога.*/
-  @Post()
+  @Post(SETTINGS.CREATE_BLOG_PATH)
   @HttpCode(HttpStatus.CREATED)
   async createBlog(@Body() body: CreateBlogInputDTO): Promise<BlogOutputDTO> {
     /*Просим сервис "blogsService" создать блог.*/
@@ -57,7 +57,7 @@ export class BlogsController {
   }
 
   /*004. GET-запрос по поиску блогов с пагинацией, используя query-параметры.*/
-  @Get()
+  @Get(SETTINGS.GET_BLOG_LIST_PATH)
   async getBlogList(@Query() query: GetBlogListQueryInputDTO): Promise<PaginationMetaDataOutputDTO<BlogListOutputDTO>> {
     /*Просим query-сервис "blogsQueryService" найти блоги.*/
     return await this.blogsQueryService.findAll(query);

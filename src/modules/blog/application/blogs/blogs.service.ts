@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { BlogsRepository } from '../../infrastructure/blogs/blogs.repository';
+import { CreateBlogInputDTO } from '../../api/blogs/input-dto/create-blog.input-dto';
 import { UpdateBlogInputDTO } from '../../api/blogs/input-dto/update-blog.input-dto';
 import { BlogOutputDTO } from '../../api/blogs/output-dto/blog.output-dto';
 import { Blog } from '../../domain/blogs/blog.entity';
 import { BlogDocumentType } from '../../domain/blogs/document-types/blog.document-type';
-import { CreateBlogDomainDTO } from '../../domain/blogs/domain-dto/create-blog.domain-dto';
 /*Импортируем "BlogModelType" как тип, чтобы TS не использовал его в JS-коде.*/
 import type { BlogModelType } from '../../domain/blogs/model-types/blog.model-type';
 
@@ -19,7 +19,7 @@ export class BlogsService {
   ) {}
 
   /*Метод для создания блога.*/
-  async create(dto: CreateBlogDomainDTO): Promise<string> {
+  async create(dto: CreateBlogInputDTO): Promise<string> {
     /*Просим модель "BlogModel" создать блог.*/
     const blog: BlogDocumentType = this.BlogModel.createInstance(dto);
     /*Просим репозиторий "blogsRepository" сохранить блог в БД.*/
