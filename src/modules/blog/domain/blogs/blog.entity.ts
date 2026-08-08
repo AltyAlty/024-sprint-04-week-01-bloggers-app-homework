@@ -31,8 +31,8 @@ export class Blog {
     return (this as unknown as BlogDocumentType)._id.toString();
   }
 
-  /*Метод для создания блога.*/
-  static create(dto: CreateBlogDomainDTO): BlogDocumentType {
+  /*Метод для создания блога. Лучше не называть этот метод "create", чтобы TS не путал его с методом из Mongoose.*/
+  static createInstance(dto: CreateBlogDomainDTO): BlogDocumentType {
     const blog = new this();
     blog.name = dto.name;
     blog.description = dto.description;

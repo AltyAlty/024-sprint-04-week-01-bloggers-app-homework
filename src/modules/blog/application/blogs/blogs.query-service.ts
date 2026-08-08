@@ -1,23 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import { BlogsQueryRepository } from '../../infrastructure/blogs/blogs.query-repository';
 import { GetBlogListQueryInputDTO } from '../../api/blogs/input-dto/query/get-blog-list-query.input-dto';
 import { PaginationMetaDataOutputDTO } from '../../../../core/pagination/output-dto/pagination-meta-data.output-dto';
 import { BlogOutputDTO } from '../../api/blogs/output-dto/blog.output-dto';
 import { BlogListOutputDTO } from '../../api/blogs/output-dto/blog-list.output-dto';
-import { Blog } from '../../domain/blogs/blog.entity';
 import { BlogDocumentType } from '../../domain/blogs/document-types/blog.document-type';
 import { BlogListDocumentType } from '../../domain/blogs/document-types/blog-list.document-type';
-import type { BlogModelType } from '../../domain/blogs/model-types/blog.model-type';
 
 /*Query-сервис для блогов.*/
 @Injectable()
 export class BlogsQueryService {
-  constructor(
-    @InjectModel(Blog.name)
-    private BlogModel: BlogModelType,
-    private blogsQueryRepository: BlogsQueryRepository
-  ) {}
+  constructor(private blogsQueryRepository: BlogsQueryRepository) {}
 
   /*Метод для поиска блога по ID.*/
   async findById(id: string): Promise<BlogOutputDTO> {
@@ -30,10 +23,10 @@ export class BlogsQueryService {
   }
 
   /*Метод для поиска блогов.*/
-  async findAll(query: GetBlogListQueryInputDTO): Promise<PaginationMetaDataOutputDTO<BlogOutputDTO[]>> {
+  async findAll(dto: GetBlogListQueryInputDTO): Promise<PaginationMetaDataOutputDTO<BlogListOutputDTO>> {
     /*Просим query-репозиторий "blogsQueryRepository" найти блоги в БД.*/
     const { items, totalCount }: { items: BlogListDocumentType; totalCount: number } =
-      await this.blogsQueryRepository.findAll(query);
+      await this.blogsQueryRepository.findAll(dto);
 
     /*Преобразовываем блоги из БД в подготовленные для отправки клиенту блоги.*/
     const blogListOutput: BlogListOutputDTO = BlogOutputDTO.mapFromBlogListDocumentTypeToBlogListOutputDTO(items);
@@ -41,8 +34,8 @@ export class BlogsQueryService {
     /*Преобразовываем подготовленные для отправки клиенту блоги в подготовленные для отправки клиенту блоги с
     пагинацией.*/
     return PaginationMetaDataOutputDTO.mapToOutputDTO({
-      page: query.pageNumber,
-      pageSize: query.pageSize,
+      page: dto.pageNumber,
+      pageSize: dto.pageSize,
       totalCount: totalCount,
       items: blogListOutput,
     });

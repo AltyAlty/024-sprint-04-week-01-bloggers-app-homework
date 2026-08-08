@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { DeleteResult } from 'mongoose';
 import { Blog } from '../../domain/blogs/blog.entity';
 import { BlogDocumentType } from '../../domain/blogs/document-types/blog.document-type';
-/*Импортируем "BlogModelType" как тип, чтобы TS не использовал его в JS-коде.*/
 import type { BlogModelType } from '../../domain/blogs/model-types/blog.model-type';
 
 /*Репозиторий для блогов.*/
@@ -19,7 +18,7 @@ export class BlogsRepository {
   /*Метод для поиска блога по ID в БД.*/
   async findById(id: string): Promise<BlogDocumentType | null> {
     /*Просим модель "BlogModel" найти блог по ID в БД.*/
-    return this.BlogModel.findOne({ _id: id, deletedAt: null });
+    return await this.BlogModel.findOne({ _id: id, deletedAt: null });
   }
 
   /*Метод для hard удаления блога по ID в БД.*/

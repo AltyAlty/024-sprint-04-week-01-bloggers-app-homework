@@ -21,7 +21,7 @@ export class BlogsService {
   /*Метод для создания блога.*/
   async create(dto: CreateBlogDomainDTO): Promise<string> {
     /*Просим модель "BlogModel" создать блог.*/
-    const blog: BlogDocumentType = this.BlogModel.create(dto);
+    const blog: BlogDocumentType = this.BlogModel.createInstance(dto);
     /*Просим репозиторий "blogsRepository" сохранить блог в БД.*/
     await this.blogsRepository.save(blog);
     /*Возвращаем ID созданного блога.*/
@@ -46,7 +46,7 @@ export class BlogsService {
     if (!blogDB) throw new NotFoundException('Blog not found');
     /*Если блог был найден, то изменяем его.*/
     blogDB.update(dto);
-    /*Возвращаем измененный блог.*/
+    /*Просим репозиторий "blogsRepository" сохранить измененный блог.*/
     await this.blogsRepository.save(blogDB);
   }
 
@@ -58,6 +58,7 @@ export class BlogsService {
     if (!blogDB) throw new NotFoundException('Blog not found');
     /*Если блог был найден, то помечаем его как удаленный.*/
     blogDB.markAsDeleted();
+    /*Просим репозиторий "blogsRepository" сохранить измененный блог.*/
     await this.blogsRepository.save(blogDB);
   }
 

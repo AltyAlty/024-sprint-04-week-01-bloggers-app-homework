@@ -15,21 +15,21 @@ export class BlogsQueryRepository {
   /*Метод для поиска блога по ID в БД.*/
   async findById(id: string): Promise<BlogDocumentType | null> {
     /*Просим модель "BlogModel" найти блог по ID в БД.*/
-    return this.BlogModel.findOne({ _id: id, deletedAt: null });
+    return await this.BlogModel.findOne({ _id: id, deletedAt: null });
   }
 
   /*Метод для поиска блогов в БД.*/
-  async findAll(queryDTO: GetBlogListQueryInputDTO): Promise<{ items: BlogListDocumentType; totalCount: number }> {
+  async findAll(dto: GetBlogListQueryInputDTO): Promise<{ items: BlogListDocumentType; totalCount: number }> {
     /*Переменная "skip" обозначает сколько записей надо пропустить перед тем, как начать отдавать запрошенную страницу
     "pageNumber".*/
-    const skip: number = queryDTO.calculateSkip();
+    const skip: number = dto.calculateSkip();
     /*Динамически собираем фильтр для поиска в MongoDB. Начинаем с пустого фильтра если используем hard удаление, либо
     с "deletedAt: null", если используем soft удаление.*/
     const filter: QueryFilter<BlogDocumentType> = { deletedAt: null };
     /*Если в query-параметрах было указано имя блога, то добавляем условие по полю "name".
     "$regex: query.searchNameTerm" означает поиск по шаблону - по вхождению строки. "$options: 'i'" означает, что поиск
     будет без учета регистра.*/
-    if (queryDTO.searchNameTerm) filter.name = { $regex: queryDTO.searchNameTerm, $options: 'i' };
+    if (dto.searchNameTerm) filter.name = { $regex: dto.searchNameTerm, $options: 'i' };
 
     /*Просим модель "BlogModel" найти блоги в БД:
     1. ".find(filter)": выбираем документы по собранному фильтру.
@@ -39,9 +39,9 @@ export class BlogsQueryRepository {
     4. ".limit(queryDTO.pageSize)": берем записей не больше размера запрошенной страницы.*/
     const [items, totalCount]: [BlogListDocumentType, number] = await Promise.all([
       this.BlogModel.find(filter)
-        .sort({ [queryDTO.sortBy]: queryDTO.sortDirection })
+        .sort({ [dto.sortBy]: dto.sortDirection })
         .skip(skip)
-        .limit(queryDTO.pageSize),
+        .limit(dto.pageSize),
       /*Просим модель "BlogModel" подсчитать общее количество документов, подходящих под фильтр, без учета пагинации.*/
       this.BlogModel.countDocuments(filter),
     ]);
