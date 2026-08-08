@@ -25,7 +25,7 @@ export class PostsRepository {
 
   /*Метод для поиска поста по ID в БД.*/
   async findById(id: string): Promise<PostDocumentType | null> {
-    /*Просим модель "PostModel" найти блог по ID в БД.*/
+    /*Просим модель "PostModel" найти пост по ID в БД.*/
     return await this.PostModel.findOne({ _id: id, deletedAt: null });
   }
 

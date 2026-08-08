@@ -15,11 +15,11 @@ export class BlogsQueryService {
   /*Метод для поиска блога по ID.*/
   async findById(id: string): Promise<BlogOutputDTO> {
     /*Просим query-репозиторий "blogsQueryRepository" найти блог по ID в БД.*/
-    const blogDB: BlogDocumentType | null = await this.blogsQueryRepository.findById(id);
+    const blog: BlogDocumentType | null = await this.blogsQueryRepository.findById(id);
     /*Если блог не был найден, то выбрасываем исключение с информацией об этом.*/
-    if (!blogDB) throw new NotFoundException('Blog not found');
+    if (!blog) throw new NotFoundException('Blog not found');
     /*Если блог был найден, то преобразовываем блог из БД в подготовленный для отправки клиенту блог и возвращаем его.*/
-    return BlogOutputDTO.mapFromBlogDocumentTypeToBlogOutputDTO(blogDB);
+    return BlogOutputDTO.mapFromBlogDocumentTypeToBlogOutputDTO(blog);
   }
 
   /*Метод для поиска блогов.*/
@@ -31,8 +31,8 @@ export class BlogsQueryService {
     /*Преобразовываем блоги из БД в подготовленные для отправки клиенту блоги.*/
     const blogListOutput: BlogListOutputDTO = BlogOutputDTO.mapFromBlogListDocumentTypeToBlogListOutputDTO(items);
 
-    /*Преобразовываем подготовленные для отправки клиенту блоги в подготовленные для отправки клиенту блоги с
-    пагинацией.*/
+    /*Преобразовываем подготовленные для отправки клиенту блоги в подготовленные для отправки клиенту с пагинацией
+    блоги и возвращаем их.*/
     return PaginationMetaDataOutputDTO.mapToOutputDTO({
       page: dto.pageNumber,
       pageSize: dto.pageSize,

@@ -1,7 +1,7 @@
 import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsString, IsUrl, Length, Matches } from 'class-validator';
 
-/*Input DTO для создания блога с валидацией при помощи библиотеки class-validator.*/
+/*Валидационный Input DTO для создания блога с валидацией при помощи библиотеки class-validator.*/
 export class CreateBlogInputDTO {
   @IsString({ message: 'Field "name" must be a string' })
   @Transform(({ value }: { value: string }): string => value?.trim())

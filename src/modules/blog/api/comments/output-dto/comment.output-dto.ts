@@ -47,28 +47,26 @@ export class CommentOutputDTO {
     /*Получаем ID комментариев.*/
     const commentIds: string[] = comments.map((comment: CommentDocumentType): string => comment._id.toString());
     /*Создаем Map формата "commentId: likeStatus", чтобы избежать многочисленных запросов в БД для получения статусов
-  лайков пользователя каждого комментария.*/
+    лайков пользователя каждого комментария.*/
     let commentLikesDataMap: Map<string, CommentLikeStatusOutputDTO> = new Map<string, CommentLikeStatusOutputDTO>();
 
     /*Если был передан ID пользователя, то получаем статусы лайков пользователя каждого комментария.*/
     if (userId) {
       /*Просим query-репозиторий "commentsQueryRepository" найти данные о лайках комментариев по ID комментариев и ID
-    пользователя в БД.*/
-      const commentLikesDataDB: CommentLikeDataListDocumentType =
+      пользователя в БД.*/
+      const commentLikesData: CommentLikeDataListDocumentType =
         await commentsQueryRepository.findAllCommentLikesDataByCommentIdsAndUserId(commentIds, userId);
 
       /*Заполняем Map статусами лайков пользователя каждого комментария, не обращаясь в БД.*/
       commentLikesDataMap = new Map(
-        commentLikesDataDB.map(
-          (commentLikeDataDB: CommentLikeDataDocumentType): [string, CommentLikeStatusOutputDTO] => [
-            commentLikeDataDB.commentId,
-            commentLikeDataDB.likeStatus as unknown as CommentLikeStatusOutputDTO,
-          ]
-        )
+        commentLikesData.map((commentLikeData: CommentLikeDataDocumentType): [string, CommentLikeStatusOutputDTO] => [
+          commentLikeData.commentId,
+          commentLikeData.likeStatus as unknown as CommentLikeStatusOutputDTO,
+        ])
       );
     }
 
-    /*Формируем массив подготовленных для отправки клиенту без пагинации комментариев.*/
+    /*Формируем массив подготовленных для отправки клиенту комментариев.*/
     return comments.map((comment: CommentDocumentType): CommentOutputDTO => {
       /*Получаем статус лайка комментария.*/
       const likeStatus: CommentLikeStatusOutputDTO =

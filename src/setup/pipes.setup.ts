@@ -12,10 +12,10 @@ export function pipesSetup(app: INestApplication): void {
       /*Опция "transform: true" превращает сырые входные JavaScript-данные в экземпляр класса, который указан как input
       DTO в методах контроллера.
 
-      В случае метода "getAll()" в "UsersController" NestJS при помощи библиотеки class-transformer создаст экземпляр
-      класса "GetUsersQueryParams", то есть примерно будет выполнено "new GetUsersQueryParams()". Таким образом в метод
-      "getAll()" query-репозитория "usersQueryRepository" можно будет передать параметр "query", который помимо свойств,
-      еще будет иметь и полезные методы.
+      В случае метода "getBlogList()" в контроллере "BlogsController" NestJS при помощи библиотеки class-transformer
+      создаст экземпляр класса "GetBlogListQueryInputDTO", то есть примерно будет выполнено
+      "new GetBlogListQueryInputDTO()". Таким образом в метод "getBlogList()" query-сервиса "blogsQueryService" можно
+      будет передать параметр "query", который помимо свойств, еще будет иметь и полезные методы.
 
       Также эта опция нужна для работы декоратора "@Transform()" из библиотеки class-transformer.*/
       transform: true,

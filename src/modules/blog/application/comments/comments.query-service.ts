@@ -9,7 +9,6 @@ import { CommentListOutputDTO } from '../../api/comments/output-dto/comment-list
 import { CommentDocumentType } from '../../domain/comments/document-types/comment.document-type';
 import { CommentLikeDataDocumentType } from '../../domain/comments/document-types/comment-like-data.document-type';
 import { CommentListDocumentType } from '../../domain/comments/document-types/comment-list.document-type';
-import { PostListDocumentType } from '../../domain/posts/document-types/post-list.document-type';
 
 /*Query-сервис для комментариев.*/
 @Injectable()
@@ -22,24 +21,24 @@ export class CommentsQueryService {
   /*Метод для поиска комментария по ID.*/
   async findById(id: string, userId?: string): Promise<CommentOutputDTO> {
     /*Просим query-репозиторий "commentsQueryRepository" найти комментарий по ID в БД.*/
-    const commentDB: CommentDocumentType | null = await this.commentsQueryRepository.findById(id);
+    const comment: CommentDocumentType | null = await this.commentsQueryRepository.findById(id);
     /*Если комментарий не был найден, то выбрасываем исключение с информацией об этом.*/
-    if (!commentDB) throw new NotFoundException('Comment not found');
+    if (!comment) throw new NotFoundException('Comment not found');
     /*Если комментарий был найден, то формируем статус лайка комментария.*/
     let likeStatus: CommentLikeStatusOutputDTO = CommentLikeStatusOutputDTO.None;
 
     /*Если в запросе был указан AT.*/
     if (userId) {
       /*Просим query-репозиторий "commentsQueryRepository" найти данные о лайке комментария в БД.*/
-      const commentLikeDataDB: CommentLikeDataDocumentType | null =
+      const commentLikeData: CommentLikeDataDocumentType | null =
         await this.commentsQueryRepository.findCommentLikeDataByPostIdAndUserId(id, userId);
 
       /*Если данные о лайке комментария были найдены, то получаем статус лайка.*/
-      if (commentLikeDataDB) likeStatus = commentLikeDataDB.likeStatus as unknown as CommentLikeStatusOutputDTO;
+      if (commentLikeData) likeStatus = commentLikeData.likeStatus as unknown as CommentLikeStatusOutputDTO;
     }
 
     /*Преобразовываем комментарий из БД в подготовленный для отправки клиенту комментарий и возвращаем его.*/
-    return CommentOutputDTO.mapFromCommentDocumentTypeToCommentOutputDTO(commentDB, likeStatus);
+    return CommentOutputDTO.mapFromCommentDocumentTypeToCommentOutputDTO(comment, likeStatus);
   }
 
   /*Метод для поиска комментариев по ID поста.*/
@@ -64,7 +63,7 @@ export class CommentsQueryService {
       );
 
     /*Преобразовываем подготовленные для отправки клиенту комментарии в подготовленные для отправки клиенту с
-    пагинацией комментарии.*/
+    пагинацией комментарии и возвращаем их.*/
     return PaginationMetaDataOutputDTO.mapToOutputDTO({
       page: dto.pageNumber,
       pageSize: dto.pageSize,

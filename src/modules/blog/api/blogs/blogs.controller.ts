@@ -21,8 +21,8 @@ import { SETTINGS } from '../../../../core/settings/settings';
 export class BlogsController {
   constructor(
     private blogsService: BlogsService,
-    private postsService: PostsService,
     private blogsQueryService: BlogsQueryService,
+    private postsService: PostsService,
     private postsQueryService: PostsQueryService
   ) {}
 

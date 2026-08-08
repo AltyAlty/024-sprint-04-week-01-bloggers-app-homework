@@ -59,33 +59,33 @@ export class PostOutputDTO {
     if (posts.length === 0) return [];
     /*Получаем ID постов.*/
     const postIds: string[] = posts.map((post: PostDocumentType): string => post._id.toString());
-    /*Создаем Map формата "postId: likeStatus", чтобы избежать многочисленных запросов в БД для получения статусов лайков
-    пользователя каждого поста.*/
+    /*Создаем Map формата "postId: likeStatus", чтобы избежать многочисленных запросов в БД для получения статусов
+    лайков пользователя каждого поста.*/
     let postLikesDataMap: Map<string, PostLikeStatusOutputDTO> = new Map<string, PostLikeStatusOutputDTO>();
 
     /*Если был передан ID пользователя, то получаем статусы лайков пользователя каждого поста.*/
     if (userId) {
       /*Просим query-репозиторий "postsQueryRepository" найти данные о лайках постов по ID постов и ID пользователя в
       БД.*/
-      const postLikesDataDB: PostLikeDataListDocumentType =
+      const postLikesData: PostLikeDataListDocumentType =
         await postsQueryRepository.findAllPostLikesDataByPostIdsAndUserId(postIds, userId);
 
       /*Заполняем Map статусами лайков пользователя каждого поста, не обращаясь в БД.*/
       postLikesDataMap = new Map(
-        postLikesDataDB.map((postLikeDataDB: PostLikeDataDocumentType): [string, PostLikeStatusOutputDTO] => [
-          postLikeDataDB.postId,
-          postLikeDataDB.likeStatus as unknown as PostLikeStatusOutputDTO,
+        postLikesData.map((postLikeData: PostLikeDataDocumentType): [string, PostLikeStatusOutputDTO] => [
+          postLikeData.postId,
+          postLikeData.likeStatus as unknown as PostLikeStatusOutputDTO,
         ])
       );
     }
 
-    /*Создаем Map формата "postId: PostLikeDataListDocumentType", чтобы избежать многочисленных запросов в БД для получения
-    данных о трех последних лайках каждого поста.*/
+    /*Создаем Map формата "postId: PostLikeDataListDocumentType", чтобы избежать многочисленных запросов в БД для
+    получения данных о трех последних лайках каждого поста.*/
     const newestLikesMap: Map<string, PostLikeDataListDocumentType> =
       /*Просим query-репозиторий "postsQueryRepository" найти данные о трех последних лайках постов по ID постов в БД.*/
       await postsQueryRepository.findLastThreeLikesForPostsByPostIds(postIds);
 
-    /*Формируем массив подготовленных для отправки клиенту без пагинации постов.*/
+    /*Формируем массив подготовленных для отправки клиенту постов.*/
     return posts.map((post: PostDocumentType): PostOutputDTO => {
       /*Получаем ID поста.*/
       const postId: string = post._id.toString();

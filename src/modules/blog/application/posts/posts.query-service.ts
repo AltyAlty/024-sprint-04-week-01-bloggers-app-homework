@@ -22,26 +22,26 @@ export class PostsQueryService {
   /*Метод для поиска поста по ID.*/
   async findById(id: string, userId?: string): Promise<PostOutputDTO> {
     /*Просим query-репозиторий "postsQueryRepository" найти пост по ID в БД.*/
-    const postDB: PostDocumentType | null = await this.postsQueryRepository.findById(id);
+    const post: PostDocumentType | null = await this.postsQueryRepository.findById(id);
     /*Если пост не был найден, то выбрасываем исключение с информацией об этом.*/
-    if (!postDB) throw new NotFoundException('Post not found');
+    if (!post) throw new NotFoundException('Post not found');
     /*Если пост был найден, то формируем статус лайка поста.*/
     let likeStatus: PostLikeStatusOutputDTO = PostLikeStatusOutputDTO.None;
 
     /*Если в запросе был указан AT.*/
     if (userId) {
       /*Просим query-репозиторий "postsQueryRepository" найти данные о лайке поста в БД.*/
-      const postLikeDataDB: PostLikeDataDocumentType | null =
+      const postLikeData: PostLikeDataDocumentType | null =
         await this.postsQueryRepository.findPostLikeDataByPostIdAndUserId(id, userId);
 
       /*Если данные о лайке поста были найдены, то получаем статус лайка.*/
-      if (postLikeDataDB) likeStatus = postLikeDataDB.likeStatus as unknown as PostLikeStatusOutputDTO;
+      if (postLikeData) likeStatus = postLikeData.likeStatus as unknown as PostLikeStatusOutputDTO;
     }
 
     /*Просим query-репозиторий "postsQueryRepository" найти данные о трех последних лайках поста по ID поста в БД.*/
     const newestLikes: NewestPostLikeListOutputDTO = await this.postsQueryRepository.findLastThreePostLikes(id);
     /*Преобразовываем пост из БД в подготовленный для отправки клиенту пост и возвращаем его.*/
-    return PostOutputDTO.mapFromPostDocumentTypeToPostOutputDTO(postDB, likeStatus, newestLikes);
+    return PostOutputDTO.mapFromPostDocumentTypeToPostOutputDTO(post, likeStatus, newestLikes);
   }
 
   /*Метод для поиска постов.*/
@@ -65,7 +65,7 @@ export class PostsQueryService {
     );
 
     /*Преобразовываем подготовленные для отправки клиенту посты в подготовленные для отправки клиенту с пагинацией
-    посты.*/
+    посты и возвращаем их.*/
     return PaginationMetaDataOutputDTO.mapToOutputDTO({
       page: dto.pageNumber,
       pageSize: dto.pageSize,

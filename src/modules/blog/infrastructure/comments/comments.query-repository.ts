@@ -10,7 +10,6 @@ import { CommentLikeDataListDocumentType } from '../../domain/comments/document-
 import { CommentListDocumentType } from '../../domain/comments/document-types/comment-list.document-type';
 import type { CommentModelType } from '../../domain/comments/model-types/comment.model-type';
 import type { CommentLikeDataModelType } from '../../domain/comments/model-types/comment-like-data.model-type';
-import { PostListDocumentType } from '../../domain/posts/document-types/post-list.document-type';
 
 /*Query-репозиторий для комментариев.*/
 @Injectable()

@@ -7,8 +7,7 @@ export abstract class PaginationMetaDataOutputDTO<T> {
   totalCount: number;
   abstract items: T;
 
-  /*Маппер для преобразования элементов списка из БД в подготовленные для отправки клиенту элементы списка с
-  пагинацией.*/
+  /*Маппер для преобразования элементов списка в подготовленные для отправки клиенту с пагинацией элементы списка.*/
   public static mapToOutputDTO<T>(data: {
     page: number;
     pageSize: number;

@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { SETTINGS } from './core/settings/settings';
 import { BlogModule } from './modules/blog/blog.module';
 
-/*Главный модуль приложения. Обязателен.*/
+/*Главный обязательный модуль приложения.*/
 @Module({
   imports: [MongooseModule.forRoot(SETTINGS.MONGO_URL), BlogModule],
   controllers: [],
