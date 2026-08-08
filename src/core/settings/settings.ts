@@ -12,6 +12,10 @@ export const SETTINGS = {
 
   POSTS_PREFIX: 'posts',
   GET_POST_BY_ID_PATH: ':id',
+  GET_COMMENT_LIST_BY_POST_ID_PATH: ':postId/comments',
   UPDATE_POST_BY_ID_PATH: ':id',
   DELETE_POST_BY_ID_PATH: ':id',
+
+  COMMENTS_PREFIX: 'posts',
+  GET_COMMENT_BY_ID_PATH: ':id',
 };

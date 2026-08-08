@@ -1,11 +1,14 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
 import { ApiParam } from '@nestjs/swagger';
 import { PostsService } from '../../application/posts/posts.service';
+import { CommentsQueryService } from '../../application/comments/comments.query-service';
 import { PostsQueryService } from '../../application/posts/posts.query-service';
 import { CreatePostInputDTO } from './input-dto/create-post.input-dto';
+import { GetCommentListByPostIdQueryInputDTO } from './input-dto/query/get-comment-list-by-post-id-query.input-dto';
 import { GetPostListQueryInputDTO } from './input-dto/query/get-post-list-query.input-dto';
 import { UpdatePostInputDTO } from './input-dto/update-post.input-dto';
 import { PaginationMetaDataOutputDTO } from '../../../../core/pagination/output-dto/pagination-meta-data.output-dto';
+import { CommentListOutputDTO } from '../comments/output-dto/comment-list.output-dto';
 import { PostOutputDTO } from './output-dto/post.output-dto';
 import { PostListOutputDTO } from './output-dto/post-list.output-dto';
 import { SETTINGS } from '../../../../core/settings/settings';
@@ -15,7 +18,8 @@ import { SETTINGS } from '../../../../core/settings/settings';
 export class PostsController {
   constructor(
     private postsService: PostsService,
-    private postsQueryService: PostsQueryService
+    private postsQueryService: PostsQueryService,
+    private commentsQueryService: CommentsQueryService
   ) {}
 
   /*001. POST-запрос по созданию поста.*/
@@ -44,7 +48,18 @@ export class PostsController {
     return await this.postsQueryService.findAll(query);
   }
 
-  /*004. PUT-запрос по изменению поста по ID, используя URI-параметры.*/
+  /*004. GET-запрос по поиску комментариев с пагинацией по ID поста, используя query-параметры.*/
+  @ApiParam({ name: 'id' })
+  @Get(SETTINGS.GET_COMMENT_LIST_BY_POST_ID_PATH)
+  async getCommentListByPostId(
+    @Param('id') id: string,
+    @Query() query: GetCommentListByPostIdQueryInputDTO
+  ): Promise<PaginationMetaDataOutputDTO<CommentListOutputDTO>> {
+    /*Просим query-сервис "commentsQueryService" найти комментарии по ID поста.*/
+    return await this.commentsQueryService.findAllByPostId(id, query);
+  }
+
+  /*005. PUT-запрос по изменению поста по ID, используя URI-параметры.*/
   @ApiParam({ name: 'id' })
   @Put(SETTINGS.UPDATE_POST_BY_ID_PATH)
   @HttpCode(HttpStatus.NO_CONTENT)
@@ -53,7 +68,7 @@ export class PostsController {
     await this.postsService.update(id, body);
   }
 
-  /*005. DELETE-запрос по удалению поста по ID, используя URI-параметры.*/
+  /*006. DELETE-запрос по удалению поста по ID, используя URI-параметры.*/
   @ApiParam({ name: 'id' })
   @Delete(SETTINGS.DELETE_POST_BY_ID_PATH)
   @HttpCode(HttpStatus.NO_CONTENT)
