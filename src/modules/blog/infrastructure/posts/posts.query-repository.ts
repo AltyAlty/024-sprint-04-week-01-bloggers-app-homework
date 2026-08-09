@@ -17,12 +17,12 @@ import { PostLikeData } from '../../domain/posts/post-like-data.entity';
 @Injectable()
 export class PostsQueryRepository {
   constructor(
-    @InjectModel(Post.name) private PostModel: PostModelType,
-    @InjectModel(PostLikeData.name) private PostLikeDataModel: PostLikeDataModelType
+    @InjectModel(Post.name) private readonly PostModel: PostModelType,
+    @InjectModel(PostLikeData.name) private readonly PostLikeDataModel: PostLikeDataModelType
   ) {}
 
   /*Метод для поиска поста по ID в БД.*/
-  async findById(id: string): Promise<PostDocumentType | null> {
+  public async findById(id: string): Promise<PostDocumentType | null> {
     /*Просим модель "PostModel" найти блог по ID в БД.*/
     return await this.PostModel.findOne({ _id: id, deletedAt: null });
   }

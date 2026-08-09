@@ -5,6 +5,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 export class ExtendedLikesInfo {
   @Prop({ type: Number, required: true, min: 0, default: 0 })
   likesCount: number;
+
   @Prop({ type: Number, required: true, min: 0, default: 0 })
   dislikesCount: number;
 }

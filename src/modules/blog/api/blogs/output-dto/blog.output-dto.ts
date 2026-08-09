@@ -12,7 +12,7 @@ export class BlogOutputDTO {
   isMembership: boolean;
 
   /*Маппер для преобразования блога из БД в подготовленный для отправки клиенту блог.*/
-  static mapFromBlogDocumentTypeToBlogOutputDTO(blog: BlogDocumentType): BlogOutputDTO {
+  public static mapFromBlogDocumentTypeToBlogOutputDTO(blog: BlogDocumentType): BlogOutputDTO {
     const blogOutputDTO: BlogOutputDTO = new BlogOutputDTO();
     blogOutputDTO.id = blog._id.toString();
     blogOutputDTO.name = blog.name;
@@ -24,7 +24,7 @@ export class BlogOutputDTO {
   }
 
   /*Маппер для преобразования блогов из БД в подготовленные для отправки клиенту блоги.*/
-  static mapFromBlogListDocumentTypeToBlogListOutputDTO(blogs: BlogListDocumentType): BlogListOutputDTO {
+  public static mapFromBlogListDocumentTypeToBlogListOutputDTO(blogs: BlogListDocumentType): BlogListOutputDTO {
     return blogs.map((blog: BlogDocumentType) => {
       return this.mapFromBlogDocumentTypeToBlogOutputDTO(blog);
     });

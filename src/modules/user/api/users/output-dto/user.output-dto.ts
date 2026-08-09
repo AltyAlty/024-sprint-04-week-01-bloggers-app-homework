@@ -10,7 +10,7 @@ export class UserOutputDTO {
   createdAt: Date;
 
   /*Маппер для преобразования пользователя из БД в подготовленного для отправки клиенту пользователя.*/
-  static mapFromUserDocumentTypeToUserOutputDTO(user: UserDocumentType): UserOutputDTO {
+  public static mapFromUserDocumentTypeToUserOutputDTO(user: UserDocumentType): UserOutputDTO {
     const userOutputDTO: UserOutputDTO = new UserOutputDTO();
     userOutputDTO.id = user._id.toString();
     userOutputDTO.id = user.id;
@@ -21,7 +21,7 @@ export class UserOutputDTO {
   }
 
   /*Маппер для преобразования пользователей из БД в подготовленных для отправки клиенту пользователей.*/
-  static mapFromUserListDocumentTypeToUserListOutputDTO(users: UserListDocumentType): UserListOutputDTO {
+  public static mapFromUserListDocumentTypeToUserListOutputDTO(users: UserListDocumentType): UserListOutputDTO {
     return users.map((user: UserDocumentType) => {
       return this.mapFromUserDocumentTypeToUserOutputDTO(user);
     });

@@ -27,12 +27,12 @@ export class Blog {
   deletedAt: Date | null;
 
   /*Виртуальное свойство для получения ID блога.*/
-  get id(): string {
+  public get id(): string {
     return (this as unknown as BlogDocumentType)._id.toString();
   }
 
   /*Метод для создания блога. Лучше не называть этот метод "create", чтобы TS не путал его с методом из Mongoose.*/
-  static createInstance(dto: CreateBlogDomainDTO): BlogDocumentType {
+  public static createInstance(dto: CreateBlogDomainDTO): BlogDocumentType {
     const blog = new this();
     blog.name = dto.name;
     blog.description = dto.description;
@@ -42,14 +42,14 @@ export class Blog {
   }
 
   /*Метод для изменения блога.*/
-  update(dto: UpdateBlogDomainDTO): void {
+  public update(dto: UpdateBlogDomainDTO): void {
     this.name = dto.name;
     this.description = dto.description;
     this.websiteUrl = dto.websiteUrl;
   }
 
   /*Метод для soft удаления блога.*/
-  markAsDeleted(): void {
+  public markAsDeleted(): void {
     if (this.deletedAt !== null) throw new Error('Blog is already deleted');
     this.deletedAt = new Date();
   }

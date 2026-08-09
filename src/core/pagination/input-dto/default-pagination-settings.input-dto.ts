@@ -22,7 +22,7 @@ export class DefaultPaginationSettingsInputDTO {
 
   /*Метод для подсчета сколько записей надо пропустить перед тем, как начать отдавать запрошенную страницу
   "pageNumber"*/
-  calculateSkip() {
+  public calculateSkip() {
     return (this.pageNumber - 1) * this.pageSize;
   }
 }

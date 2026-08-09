@@ -13,13 +13,13 @@ import { User } from '../../domain/users/user.entity';
 export class UsersService {
   constructor(
     @InjectModel(User.name)
-    private UserModel: UserModelType,
-    private argon2Service: Argon2Service,
-    private usersRepository: UsersRepository
+    private readonly UserModel: UserModelType,
+    private readonly argon2Service: Argon2Service,
+    private readonly usersRepository: UsersRepository
   ) {}
 
   /*Метод для создания пользователя.*/
-  async create(dto: CreateUserInputDTO): Promise<string> {
+  public async create(dto: CreateUserInputDTO): Promise<string> {
     /*Просим сервис "argon2Service" сгенерировать хеш для пароля.*/
     const passwordHash: string = await this.argon2Service.generatePasswordHash(dto.password);
     /*Просим модель "UserModel" создать пользователя.*/
@@ -31,7 +31,7 @@ export class UsersService {
   }
 
   /*Метод для поиска пользователя по ID.*/
-  async findById(id: string): Promise<UserOutputDTO> {
+  public async findById(id: string): Promise<UserOutputDTO> {
     /*Просим репозиторий "usersRepository" найти пользователя по ID в БД.*/
     const user: UserDocumentType | null = await this.usersRepository.findById(id);
     /*Если пользователь не был найден, то выбрасываем исключение с информацией об этом.*/
@@ -42,7 +42,7 @@ export class UsersService {
   }
 
   /*Метод для soft удаления пользователя по ID.*/
-  async markAsDeleted(id: string) {
+  public async markAsDeleted(id: string) {
     /*Просим репозиторий "usersRepository" найти пользователя по ID в БД.*/
     const user: UserDocumentType | null = await this.usersRepository.findById(id);
     /*Если пользователь не был найден, то выбрасываем исключение с информацией об этом.*/
@@ -54,7 +54,7 @@ export class UsersService {
   }
 
   /*Метод для hard удаления пользователя по ID.*/
-  async delete(id: string): Promise<void> {
+  public async delete(id: string): Promise<void> {
     /*Просим сервис "usersService" найти пользователя по ID в БД.*/
     await this.findById(id);
     /*Просим репозиторий "usersRepository" удалить пользователя по ID в БД.*/

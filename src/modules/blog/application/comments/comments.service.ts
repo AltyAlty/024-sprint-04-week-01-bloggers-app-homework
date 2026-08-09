@@ -9,7 +9,7 @@ import type { CommentModelType } from '../../domain/comments/model-types/comment
 export class CommentsService {
   constructor(
     @InjectModel(Comment.name)
-    private CommentModel: CommentModelType,
-    private commentsRepository: CommentsRepository
+    private readonly CommentModel: CommentModelType,
+    private readonly commentsRepository: CommentsRepository
   ) {}
 }

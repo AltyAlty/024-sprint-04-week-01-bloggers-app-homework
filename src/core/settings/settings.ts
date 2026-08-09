@@ -1,6 +1,10 @@
 export const SETTINGS = {
   PORT: Number(process.env.PORT || 5003),
+
   MONGO_URL: 'mongodb://localhost:27017/?maxPoolSize=50',
+  DB_NAME: process.env.DB_NAME || '024-s-04-w-01-bloggers-app-hw',
+  TEST_DB_NAME: process.env.DB_NAME || '024-s-04-w-01-bloggers-app-hw-test',
+
   GLOBAL_PREFIX: 'api',
 
   BLOGS_PREFIX: 'blogs',

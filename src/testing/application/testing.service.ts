@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
+import { Connection } from 'mongoose';
 import { Blog } from '../../modules/blog/domain/blogs/blog.entity';
 import type { BlogModelType } from '../../modules/blog/domain/blogs/model-types/blog.model-type';
 import { Comment } from '../../modules/blog/domain/comments/comment.entity';
@@ -22,11 +23,12 @@ export class TestingService {
     @InjectModel(PostLikeData.name) private readonly postLikeDataModel: PostLikeDataModelType,
     @InjectModel(Comment.name) private readonly commentModel: CommentModelType,
     @InjectModel(CommentLikeData.name) private readonly commentLikeDataModel: CommentLikeDataModelType,
-    @InjectModel(User.name) private readonly userModel: UserModelType
+    @InjectModel(User.name) private readonly userModel: UserModelType,
+    @InjectConnection() private readonly connection: Connection
   ) {}
 
-  /*Метод для очистки БД.*/
-  async clearDb(): Promise<void> {
+  /*Метод для очистки БД, без удаления индексов.*/
+  public async clearDb(): Promise<void> {
     await Promise.all([
       this.blogModel.deleteMany({}),
       this.postModel.deleteMany({}),
@@ -35,5 +37,10 @@ export class TestingService {
       this.commentLikeDataModel.deleteMany({}),
       this.userModel.deleteMany({}),
     ]);
+  }
+
+  /*Метод для полной очистки БД.*/
+  public async dropDb(): Promise<void> {
+    await this.connection.dropDatabase();
   }
 }

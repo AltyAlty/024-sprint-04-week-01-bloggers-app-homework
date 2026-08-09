@@ -5,6 +5,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 export class CommentatorInfo {
   @Prop({ type: Number, required: true, trim: true, minlength: 1, maxlength: 100 })
   userId: string;
+
   @Prop({ type: Number, required: true, trim: true, minlength: 1, maxlength: 100 })
   userLogin: string;
 }

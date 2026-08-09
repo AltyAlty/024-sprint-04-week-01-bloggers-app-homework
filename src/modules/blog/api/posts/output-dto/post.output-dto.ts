@@ -21,7 +21,7 @@ export class PostOutputDTO {
   extendedLikesInfo: ExtendedLikesInfoOutputDTO;
 
   /*Маппер для преобразования поста из БД в подготовленный для отправки клиенту пост.*/
-  static mapFromPostDocumentTypeToPostOutputDTO(
+  public static mapFromPostDocumentTypeToPostOutputDTO(
     post: PostDocumentType,
     likeStatus: PostLikeStatusOutputDTO,
     newestLikes: NewestPostLikeListOutputDTO
@@ -50,7 +50,7 @@ export class PostOutputDTO {
   }
 
   /*Маппер для преобразования постов из БД в подготовленные для отправки клиенту посты.*/
-  static async mapFromPostListDocumentTypeToPostListOutputDTO(
+  public static async mapFromPostListDocumentTypeToPostListOutputDTO(
     posts: PostListDocumentType,
     postsQueryRepository: PostsQueryRepository,
     userId: string | undefined

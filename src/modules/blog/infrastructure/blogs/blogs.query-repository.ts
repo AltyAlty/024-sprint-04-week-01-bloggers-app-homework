@@ -10,16 +10,16 @@ import type { BlogModelType } from '../../domain/blogs/model-types/blog.model-ty
 /*Query-репозиторий для блогов.*/
 @Injectable()
 export class BlogsQueryRepository {
-  constructor(@InjectModel(Blog.name) private BlogModel: BlogModelType) {}
+  constructor(@InjectModel(Blog.name) private readonly BlogModel: BlogModelType) {}
 
   /*Метод для поиска блога по ID в БД.*/
-  async findById(id: string): Promise<BlogDocumentType | null> {
+  public async findById(id: string): Promise<BlogDocumentType | null> {
     /*Просим модель "BlogModel" найти блог по ID в БД.*/
     return await this.BlogModel.findOne({ _id: id, deletedAt: null });
   }
 
   /*Метод для поиска блогов в БД.*/
-  async findAll(dto: GetBlogListQueryInputDTO): Promise<{ items: BlogListDocumentType; totalCount: number }> {
+  public async findAll(dto: GetBlogListQueryInputDTO): Promise<{ items: BlogListDocumentType; totalCount: number }> {
     /*Переменная "skip" обозначает сколько записей надо пропустить перед тем, как начать отдавать запрошенную страницу
     "pageNumber".*/
     const skip: number = dto.calculateSkip();

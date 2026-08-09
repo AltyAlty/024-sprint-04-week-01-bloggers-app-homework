@@ -27,12 +27,12 @@ export class Comment {
   deletedAt: Date | null;
 
   /*Виртуальное свойство для получения ID комментария.*/
-  get id(): string {
+  public get id(): string {
     return (this as unknown as CommentDocumentType)._id.toString();
   }
 
   /*Метод для создания комментария.*/
-  static createInstance(dto: CreateCommentDomainDTO): CommentDocumentType {
+  public static createInstance(dto: CreateCommentDomainDTO): CommentDocumentType {
     const comment = new this();
     comment.content = dto.content;
     comment.postId = dto.postId;
@@ -42,12 +42,12 @@ export class Comment {
   }
 
   /*Метод для изменения комментария.*/
-  update(dto: UpdateCommentDomainDTO): void {
+  public update(dto: UpdateCommentDomainDTO): void {
     this.content = dto.content;
   }
 
   /*Метод для soft удаления комментария.*/
-  markAsDeleted(): void {
+  public markAsDeleted(): void {
     if (this.deletedAt !== null) throw new Error('Comment is already deleted');
     this.deletedAt = new Date();
   }

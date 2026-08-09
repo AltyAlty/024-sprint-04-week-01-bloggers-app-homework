@@ -14,12 +14,12 @@ import type { BlogModelType } from '../../domain/blogs/model-types/blog.model-ty
 export class BlogsService {
   constructor(
     @InjectModel(Blog.name)
-    private BlogModel: BlogModelType,
-    private blogsRepository: BlogsRepository
+    private readonly BlogModel: BlogModelType,
+    private readonly blogsRepository: BlogsRepository
   ) {}
 
   /*Метод для создания блога.*/
-  async create(dto: CreateBlogInputDTO): Promise<string> {
+  public async create(dto: CreateBlogInputDTO): Promise<string> {
     /*Просим модель "BlogModel" создать блог.*/
     const blog: BlogDocumentType = this.BlogModel.createInstance(dto);
     /*Просим репозиторий "blogsRepository" сохранить блог в БД.*/
@@ -29,7 +29,7 @@ export class BlogsService {
   }
 
   /*Метод для поиска блога по ID.*/
-  async findById(id: string): Promise<BlogOutputDTO> {
+  public async findById(id: string): Promise<BlogOutputDTO> {
     /*Просим репозиторий "blogsRepository" найти блог по ID в БД.*/
     const blog: BlogDocumentType | null = await this.blogsRepository.findById(id);
     /*Если блог не был найден, то выбрасываем исключение с информацией об этом.*/
@@ -39,7 +39,7 @@ export class BlogsService {
   }
 
   /*Метод для изменения блога по ID.*/
-  async update(id: string, dto: UpdateBlogInputDTO): Promise<void> {
+  public async update(id: string, dto: UpdateBlogInputDTO): Promise<void> {
     /*Просим репозиторий "blogsRepository" найти блог по ID в БД.*/
     const blog: BlogDocumentType | null = await this.blogsRepository.findById(id);
     /*Если блог не был найден, то выбрасываем исключение с информацией об этом.*/
@@ -51,7 +51,7 @@ export class BlogsService {
   }
 
   /*Метод для soft удаления блога по ID.*/
-  async markAsDeleted(id: string) {
+  public async markAsDeleted(id: string) {
     /*Просим репозиторий "blogsRepository" найти блог по ID в БД.*/
     const blog: BlogDocumentType | null = await this.blogsRepository.findById(id);
     /*Если блог не был найден, то выбрасываем исключение с информацией об этом.*/
@@ -63,7 +63,7 @@ export class BlogsService {
   }
 
   /*Метод для hard удаления блога по ID.*/
-  async delete(id: string): Promise<void> {
+  public async delete(id: string): Promise<void> {
     /*Просим сервис "blogsService" найти блог по ID в БД.*/
     await this.findById(id);
     /*Просим репозиторий "blogsRepository" удалить блог по ID в БД.*/

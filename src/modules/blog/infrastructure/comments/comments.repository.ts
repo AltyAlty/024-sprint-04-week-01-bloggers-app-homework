@@ -7,10 +7,10 @@ import type { CommentModelType } from '../../domain/comments/model-types/comment
 /*Репозиторий для комментариев.*/
 @Injectable()
 export class CommentsRepository {
-  constructor(@InjectModel(Comment.name) private CommentModel: CommentModelType) {}
+  constructor(@InjectModel(Comment.name) private readonly CommentModel: CommentModelType) {}
 
   /*Метод для сохранения комментария в БД.*/
-  async save(comment: CommentDocumentType): Promise<void> {
+  public async save(comment: CommentDocumentType): Promise<void> {
     await comment.save();
   }
 }

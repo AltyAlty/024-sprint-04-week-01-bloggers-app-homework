@@ -15,12 +15,12 @@ import { PostListDocumentType } from '../../domain/posts/document-types/post-lis
 @Injectable()
 export class PostsQueryService {
   constructor(
-    private blogsQueryService: BlogsQueryService,
-    private postsQueryRepository: PostsQueryRepository
+    private readonly blogsQueryService: BlogsQueryService,
+    private readonly postsQueryRepository: PostsQueryRepository
   ) {}
 
   /*Метод для поиска поста по ID.*/
-  async findById(id: string, userId?: string): Promise<PostOutputDTO> {
+  public async findById(id: string, userId?: string): Promise<PostOutputDTO> {
     /*Просим query-репозиторий "postsQueryRepository" найти пост по ID в БД.*/
     const post: PostDocumentType | null = await this.postsQueryRepository.findById(id);
     /*Если пост не был найден, то выбрасываем исключение с информацией об этом.*/
@@ -45,7 +45,7 @@ export class PostsQueryService {
   }
 
   /*Метод для поиска постов.*/
-  async findAll(
+  public async findAll(
     dto: GetPostListQueryInputDTO,
     blogId?: string,
     userId?: string

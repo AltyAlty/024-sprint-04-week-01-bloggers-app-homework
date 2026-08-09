@@ -32,12 +32,12 @@ export class Post {
   deletedAt: Date | null;
 
   /*Виртуальное свойство для получения ID поста.*/
-  get id(): string {
+  public get id(): string {
     return (this as unknown as PostDocumentType)._id.toString();
   }
 
   /*Метод для создания поста.*/
-  static createInstance(dto: CreatePostDomainDTO): PostDocumentType {
+  public static createInstance(dto: CreatePostDomainDTO): PostDocumentType {
     const post = new this();
     post.title = dto.title;
     post.shortDescription = dto.shortDescription;
@@ -49,7 +49,7 @@ export class Post {
   }
 
   /*Метод для изменения поста.*/
-  update(dto: UpdatePostDomainDTO): void {
+  public update(dto: UpdatePostDomainDTO): void {
     this.title = dto.title;
     this.shortDescription = dto.shortDescription;
     this.content = dto.content;
@@ -57,7 +57,7 @@ export class Post {
   }
 
   /*Метод для soft удаления поста.*/
-  markAsDeleted(): void {
+  public markAsDeleted(): void {
     if (this.deletedAt !== null) throw new Error('Post is already deleted');
     this.deletedAt = new Date();
   }

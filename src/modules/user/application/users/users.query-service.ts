@@ -9,10 +9,10 @@ import { UserListDocumentType } from '../../domain/users/document-types/user-lis
 /*Query-сервис для пользователей.*/
 @Injectable()
 export class UsersQueryService {
-  constructor(private usersQueryRepository: UsersQueryRepository) {}
+  constructor(private readonly usersQueryRepository: UsersQueryRepository) {}
 
   /*Метод для поиска блогов.*/
-  async findAll(dto: GetUserListQueryInputDTO): Promise<PaginationMetaDataOutputDTO<UserListOutputDTO>> {
+  public async findAll(dto: GetUserListQueryInputDTO): Promise<PaginationMetaDataOutputDTO<UserListOutputDTO>> {
     /*Просим query-репозиторий "usersQueryRepository" найти пользователей в БД.*/
     const { items, totalCount }: { items: UserListDocumentType; totalCount: number } =
       await this.usersQueryRepository.findAll(dto);

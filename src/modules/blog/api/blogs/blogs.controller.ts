@@ -20,16 +20,16 @@ import { SETTINGS } from '../../../../core/settings/settings';
 @Controller(SETTINGS.BLOGS_PREFIX)
 export class BlogsController {
   constructor(
-    private blogsService: BlogsService,
-    private blogsQueryService: BlogsQueryService,
-    private postsService: PostsService,
-    private postsQueryService: PostsQueryService
+    private readonly blogsService: BlogsService,
+    private readonly blogsQueryService: BlogsQueryService,
+    private readonly postsService: PostsService,
+    private readonly postsQueryService: PostsQueryService
   ) {}
 
   /*001. POST-запрос по созданию блога.*/
   @Post(SETTINGS.CREATE_BLOG_PATH)
   @HttpCode(HttpStatus.CREATED)
-  async createBlog(@Body() body: CreateBlogInputDTO): Promise<BlogOutputDTO> {
+  public async createBlog(@Body() body: CreateBlogInputDTO): Promise<BlogOutputDTO> {
     /*Просим сервис "blogsService" создать блог.*/
     const blogId: string = await this.blogsService.create(body);
     /*Просим сервис "blogsService" найти созданный блог по ID.*/
@@ -40,7 +40,7 @@ export class BlogsController {
   @ApiParam({ name: 'blogId' })
   @Post(SETTINGS.CREATE_POST_FOR_BLOG_PATH)
   @HttpCode(HttpStatus.CREATED)
-  async createPostForBlog(
+  public async createPostForBlog(
     @Param('blogId') id: string,
     @Body() body: CreatePostForBlogInputDTO
   ): Promise<PostOutputDTO> {
@@ -54,14 +54,16 @@ export class BlogsController {
   @ApiParam({ name: 'id' })
   @Get(SETTINGS.GET_BLOG_BY_ID_PATH)
   @HttpCode(HttpStatus.OK)
-  async getBlogById(@Param('id') id: string): Promise<BlogOutputDTO> {
+  public async getBlogById(@Param('id') id: string): Promise<BlogOutputDTO> {
     /*Просим query-сервис "blogsQueryService" найти блог по ID.*/
     return await this.blogsQueryService.findById(id);
   }
 
   /*004. GET-запрос по поиску блогов с пагинацией, используя query-параметры.*/
   @Get(SETTINGS.GET_BLOG_LIST_PATH)
-  async getBlogList(@Query() query: GetBlogListQueryInputDTO): Promise<PaginationMetaDataOutputDTO<BlogListOutputDTO>> {
+  public async getBlogList(
+    @Query() query: GetBlogListQueryInputDTO
+  ): Promise<PaginationMetaDataOutputDTO<BlogListOutputDTO>> {
     /*Просим query-сервис "blogsQueryService" найти блоги.*/
     return await this.blogsQueryService.findAll(query);
   }
@@ -69,7 +71,7 @@ export class BlogsController {
   /*005. GET-запрос по поиску постов с пагинацией по ID блога, используя query-параметры.*/
   @ApiParam({ name: 'blogId' })
   @Get(SETTINGS.GET_POST_LIST_BY_BLOG_ID_PATH)
-  async getPostListByBlogId(
+  public async getPostListByBlogId(
     @Param('blogId') id: string,
     @Query() query: GetPostListByBlogIdQueryInputDTO
   ): Promise<PaginationMetaDataOutputDTO<PostListOutputDTO>> {
@@ -81,7 +83,7 @@ export class BlogsController {
   @ApiParam({ name: 'id' })
   @Put(SETTINGS.UPDATE_BLOG_BY_ID_PATH)
   @HttpCode(HttpStatus.NO_CONTENT)
-  async updateBlogById(@Param('id') id: string, @Body() body: UpdateBlogInputDTO): Promise<void> {
+  public async updateBlogById(@Param('id') id: string, @Body() body: UpdateBlogInputDTO): Promise<void> {
     /*Просим сервис "blogsService" изменить блог по ID.*/
     await this.blogsService.update(id, body);
   }
@@ -90,7 +92,7 @@ export class BlogsController {
   @ApiParam({ name: 'id' })
   @Delete(SETTINGS.DELETE_BLOG_BY_ID_PATH)
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteBlogById(@Param('id') id: string): Promise<void> {
+  public async deleteBlogById(@Param('id') id: string): Promise<void> {
     /*Просим сервис "blogsService" удалить блог по ID.*/
     await this.blogsService.delete(id);
   }

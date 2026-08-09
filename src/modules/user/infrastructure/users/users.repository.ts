@@ -8,21 +8,21 @@ import { User } from '../../domain/users/user.entity';
 /*Репозиторий для пользователей.*/
 @Injectable()
 export class UsersRepository {
-  constructor(@InjectModel(User.name) private UserModel: UserModelType) {}
+  constructor(@InjectModel(User.name) private readonly UserModel: UserModelType) {}
 
   /*Метод для сохранения пользователя в БД.*/
-  async save(user: UserDocumentType): Promise<void> {
+  public async save(user: UserDocumentType): Promise<void> {
     await user.save();
   }
 
   /*Метод для поиска пользователя по ID в БД.*/
-  async findById(id: string): Promise<UserDocumentType | null> {
+  public async findById(id: string): Promise<UserDocumentType | null> {
     /*Просим модель "UserModel" найти пользователя по ID в БД.*/
     return await this.UserModel.findOne({ _id: id, deletedAt: null });
   }
 
   /*Метод для hard удаления пользователя по ID в БД.*/
-  async deleteById(id: string): Promise<boolean> {
+  public async deleteById(id: string): Promise<boolean> {
     /*Просим модель "UserModel" удалить пользователя по ID в БД.*/
     const result: DeleteResult = await this.UserModel.deleteOne({ _id: id });
     /*Возращаем статус операции по удалению пользователя по ID в БД.*/

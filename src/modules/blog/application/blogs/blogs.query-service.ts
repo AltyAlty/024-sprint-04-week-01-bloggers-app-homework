@@ -10,10 +10,10 @@ import { BlogListDocumentType } from '../../domain/blogs/document-types/blog-lis
 /*Query-сервис для блогов.*/
 @Injectable()
 export class BlogsQueryService {
-  constructor(private blogsQueryRepository: BlogsQueryRepository) {}
+  constructor(private readonly blogsQueryRepository: BlogsQueryRepository) {}
 
   /*Метод для поиска блога по ID.*/
-  async findById(id: string): Promise<BlogOutputDTO> {
+  public async findById(id: string): Promise<BlogOutputDTO> {
     /*Просим query-репозиторий "blogsQueryRepository" найти блог по ID в БД.*/
     const blog: BlogDocumentType | null = await this.blogsQueryRepository.findById(id);
     /*Если блог не был найден, то выбрасываем исключение с информацией об этом.*/
@@ -23,7 +23,7 @@ export class BlogsQueryService {
   }
 
   /*Метод для поиска блогов.*/
-  async findAll(dto: GetBlogListQueryInputDTO): Promise<PaginationMetaDataOutputDTO<BlogListOutputDTO>> {
+  public async findAll(dto: GetBlogListQueryInputDTO): Promise<PaginationMetaDataOutputDTO<BlogListOutputDTO>> {
     /*Просим query-репозиторий "blogsQueryRepository" найти блоги в БД.*/
     const { items, totalCount }: { items: BlogListDocumentType; totalCount: number } =
       await this.blogsQueryRepository.findAll(dto);

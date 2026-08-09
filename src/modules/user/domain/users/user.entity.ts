@@ -28,12 +28,12 @@ export class User {
   deletedAt: Date | null;
 
   /*Виртуальное свойство для получения ID пользователя.*/
-  get id(): string {
+  public get id(): string {
     return (this as unknown as UserDocumentType)._id.toString();
   }
 
   /*Метод для создания пользователя.*/
-  static createInstance(dto: CreateUserDomainDTO): UserDocumentType {
+  public static createInstance(dto: CreateUserDomainDTO): UserDocumentType {
     const user = new this();
     user.login = dto.login;
     user.originalEmail = dto.email;
@@ -43,7 +43,7 @@ export class User {
   }
 
   /*Метод для soft удаления пользователя.*/
-  markAsDeleted(): void {
+  public markAsDeleted(): void {
     if (this.deletedAt !== null) throw new Error('User is already deleted');
     this.deletedAt = new Date();
   }

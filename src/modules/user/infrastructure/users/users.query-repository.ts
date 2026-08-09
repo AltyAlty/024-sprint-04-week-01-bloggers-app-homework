@@ -10,10 +10,10 @@ import { User } from '../../domain/users/user.entity';
 /*Query-репозиторий для пользователей.*/
 @Injectable()
 export class UsersQueryRepository {
-  constructor(@InjectModel(User.name) private UserModel: UserModelType) {}
+  constructor(@InjectModel(User.name) private readonly UserModel: UserModelType) {}
 
   /*Метод для поиска пользователей в БД.*/
-  async findAll(dto: GetUserListQueryInputDTO): Promise<{ items: UserListDocumentType; totalCount: number }> {
+  public async findAll(dto: GetUserListQueryInputDTO): Promise<{ items: UserListDocumentType; totalCount: number }> {
     /*Переменная "skip" обозначает сколько записей надо пропустить перед тем, как начать отдавать запрошенную страницу
     "pageNumber".*/
     const skip: number = dto.calculateSkip();

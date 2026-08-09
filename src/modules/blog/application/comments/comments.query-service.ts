@@ -14,12 +14,12 @@ import { CommentListDocumentType } from '../../domain/comments/document-types/co
 @Injectable()
 export class CommentsQueryService {
   constructor(
-    private postsQueryService: PostsQueryService,
-    private commentsQueryRepository: CommentsQueryRepository
+    private readonly postsQueryService: PostsQueryService,
+    private readonly commentsQueryRepository: CommentsQueryRepository
   ) {}
 
   /*Метод для поиска комментария по ID.*/
-  async findById(id: string, userId?: string): Promise<CommentOutputDTO> {
+  public async findById(id: string, userId?: string): Promise<CommentOutputDTO> {
     /*Просим query-репозиторий "commentsQueryRepository" найти комментарий по ID в БД.*/
     const comment: CommentDocumentType | null = await this.commentsQueryRepository.findById(id);
     /*Если комментарий не был найден, то выбрасываем исключение с информацией об этом.*/

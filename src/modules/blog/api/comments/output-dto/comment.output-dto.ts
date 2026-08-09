@@ -17,7 +17,7 @@ export class CommentOutputDTO {
   likesInfo: LikesInfoOutputDTO;
 
   /*Маппер для преобразования комментария из БД в подготовленный для отправки клиенту комментарий.*/
-  static mapFromCommentDocumentTypeToCommentOutputDTO(
+  public static mapFromCommentDocumentTypeToCommentOutputDTO(
     comment: CommentDocumentType,
     likeStatus: CommentLikeStatusOutputDTO
   ): CommentOutputDTO {
@@ -37,7 +37,7 @@ export class CommentOutputDTO {
   }
 
   /*Маппер для преобразования комментариев из БД в подготовленные для отправки клиенту комментарии.*/
-  static async mapFromCommentListDocumentTypeToCommentListOutputDTO(
+  public static async mapFromCommentListDocumentTypeToCommentListOutputDTO(
     comments: CommentListDocumentType,
     commentsQueryRepository: CommentsQueryRepository,
     userId: string | undefined

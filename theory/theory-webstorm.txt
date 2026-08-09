@@ -12,6 +12,8 @@
 5. Run for files - добавить шаблон "json".
 6. Run on save - ON.
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 Настройка ESLint в WebStorm:
 1. Перейти Settings -> Languages & Frameworks -> JavaScript -> Code Quality Tools -> ESLint.
 2. Automatic ESLint configuration - ON.

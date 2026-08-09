@@ -14,17 +14,17 @@ import { PostLikeData } from '../../domain/posts/post-like-data.entity';
 @Injectable()
 export class PostsRepository {
   constructor(
-    @InjectModel(Post.name) private PostModel: PostModelType,
-    @InjectModel(PostLikeData.name) private PostLikeDataModel: PostLikeDataModelType
+    @InjectModel(Post.name) private readonly PostModel: PostModelType,
+    @InjectModel(PostLikeData.name) private readonly PostLikeDataModel: PostLikeDataModelType
   ) {}
 
   /*Метод для сохранения поста в БД.*/
-  async save(post: PostDocumentType): Promise<void> {
+  public async save(post: PostDocumentType): Promise<void> {
     await post.save();
   }
 
   /*Метод для поиска поста по ID в БД.*/
-  async findById(id: string): Promise<PostDocumentType | null> {
+  public async findById(id: string): Promise<PostDocumentType | null> {
     /*Просим модель "PostModel" найти пост по ID в БД.*/
     return await this.PostModel.findOne({ _id: id, deletedAt: null });
   }
@@ -54,7 +54,7 @@ export class PostsRepository {
   }
 
   /*Метод для hard удаления поста по ID в БД.*/
-  async deleteById(id: string): Promise<boolean> {
+  public async deleteById(id: string): Promise<boolean> {
     /*Просим модель "PostModel" удалить пост по ID в БД.*/
     const result: DeleteResult = await this.PostModel.deleteOne({ _id: id });
     /*Возращаем статус операции по удалению поста по ID в БД.*/

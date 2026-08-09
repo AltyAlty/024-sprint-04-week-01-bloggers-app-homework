@@ -15,12 +15,12 @@ import type { CommentLikeDataModelType } from '../../domain/comments/model-types
 @Injectable()
 export class CommentsQueryRepository {
   constructor(
-    @InjectModel(Comment.name) private CommentModel: CommentModelType,
-    @InjectModel(CommentLikeData.name) private CommentLikeDataModel: CommentLikeDataModelType
+    @InjectModel(Comment.name) private readonly CommentModel: CommentModelType,
+    @InjectModel(CommentLikeData.name) private readonly CommentLikeDataModel: CommentLikeDataModelType
   ) {}
 
   /*Метод для поиска комментария по ID в БД.*/
-  async findById(id: string): Promise<CommentDocumentType | null> {
+  public async findById(id: string): Promise<CommentDocumentType | null> {
     /*Просим модель "CommentModel" найти комментарий по ID в БД.*/
     return await this.CommentModel.findOne({ _id: id, deletedAt: null });
   }

@@ -19,13 +19,13 @@ import { Post } from '../../domain/posts/post.entity';
 export class PostsService {
   constructor(
     @InjectModel(Post.name)
-    private PostModel: PostModelType,
-    private blogsService: BlogsService,
-    private postsRepository: PostsRepository
+    private readonly PostModel: PostModelType,
+    private readonly blogsService: BlogsService,
+    private readonly postsRepository: PostsRepository
   ) {}
 
   /*Метод для создания поста.*/
-  async create(dto: CreatePostInputDTO): Promise<string> {
+  public async create(dto: CreatePostInputDTO): Promise<string> {
     /*Просим сервис "blogsService" найти блог по ID.*/
     const blog: BlogOutputDTO = await this.blogsService.findById(dto.blogId);
     /*Просим модель "PostModel" создать пост.*/
@@ -37,7 +37,7 @@ export class PostsService {
   }
 
   /*Метод для создания поста в блоге.*/
-  async createForBlog(dto: CreatePostForBlogInputDTO, blogId: string): Promise<string> {
+  public async createForBlog(dto: CreatePostForBlogInputDTO, blogId: string): Promise<string> {
     /*Просим сервис "blogsService" найти блог по ID.*/
     const blog: BlogOutputDTO = await this.blogsService.findById(blogId);
     /*Просим модель "PostModel" создать пост.*/
@@ -49,7 +49,7 @@ export class PostsService {
   }
 
   /*Метод для поиска поста по ID.*/
-  async findById(id: string, userId?: string): Promise<PostOutputDTO> {
+  public async findById(id: string, userId?: string): Promise<PostOutputDTO> {
     /*Просим репозиторий "postsRepository" найти пост по ID в БД.*/
     const post: PostDocumentType | null = await this.postsRepository.findById(id);
     /*Если пост не был найден, то выбрасываем исключение с информацией об этом.*/
@@ -74,7 +74,7 @@ export class PostsService {
   }
 
   /*Метод для изменения поста по ID.*/
-  async update(id: string, dto: UpdatePostInputDTO): Promise<void> {
+  public async update(id: string, dto: UpdatePostInputDTO): Promise<void> {
     /*Просим репозиторий "postsRepository" найти пост по ID в БД.*/
     const post: PostDocumentType | null = await this.postsRepository.findById(id);
     /*Если пост не был найден, то выбрасываем исключение с информацией об этом.*/
@@ -86,7 +86,7 @@ export class PostsService {
   }
 
   /*Метод для soft удаления поста по ID.*/
-  async markAsDeleted(id: string) {
+  public async markAsDeleted(id: string) {
     /*Просим репозиторий "postsRepository" найти пост по ID в БД.*/
     const post: PostDocumentType | null = await this.postsRepository.findById(id);
     /*Если пост не был найден, то выбрасываем исключение с информацией об этом.*/
@@ -98,7 +98,7 @@ export class PostsService {
   }
 
   /*Метод для hard удаления поста по ID.*/
-  async delete(id: string): Promise<void> {
+  public async delete(id: string): Promise<void> {
     /*Просим сервис "postsService" найти пост по ID в БД.*/
     await this.findById(id);
     /*Просим репозиторий "postsRepository" удалить пост по ID в БД.*/

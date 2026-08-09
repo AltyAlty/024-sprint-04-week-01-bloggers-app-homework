@@ -13,14 +13,14 @@ import { SETTINGS } from '../../../../core/settings/settings';
 @Controller(SETTINGS.USERS_PREFIX)
 export class UsersController {
   constructor(
-    private usersService: UsersService,
-    private usersQueryService: UsersQueryService
+    private readonly usersService: UsersService,
+    private readonly usersQueryService: UsersQueryService
   ) {}
 
   /*001. POST-запрос по созданию пользователя.*/
   @Post(SETTINGS.CREATE_USER_PATH)
   @HttpCode(HttpStatus.CREATED)
-  async createUser(@Body() body: CreateUserInputDTO): Promise<UserOutputDTO> {
+  public async createUser(@Body() body: CreateUserInputDTO): Promise<UserOutputDTO> {
     /*Просим сервис "usersService" создать пользователя.*/
     const userId: string = await this.usersService.create(body);
     /*Просим сервис "usersService" найти созданного пользователя по ID.*/
@@ -29,7 +29,9 @@ export class UsersController {
 
   /*002. GET-запрос по поиску пользователей с пагинацией, используя query-параметры.*/
   @Get(SETTINGS.GET_USER_LIST_PATH)
-  async getUserList(@Query() query: GetUserListQueryInputDTO): Promise<PaginationMetaDataOutputDTO<UserListOutputDTO>> {
+  public async getUserList(
+    @Query() query: GetUserListQueryInputDTO
+  ): Promise<PaginationMetaDataOutputDTO<UserListOutputDTO>> {
     /*Просим query-сервис "usersQueryService" найти блоги.*/
     return await this.usersQueryService.findAll(query);
   }
@@ -38,7 +40,7 @@ export class UsersController {
   @ApiParam({ name: 'id' })
   @Delete(SETTINGS.DELETE_USER_BY_ID_PATH)
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteUserById(@Param('id') id: string): Promise<void> {
+  public async deleteUserById(@Param('id') id: string): Promise<void> {
     /*Просим сервис "usersService" удалить блог по ID.*/
     await this.usersService.delete(id);
   }

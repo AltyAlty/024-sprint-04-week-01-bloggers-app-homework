@@ -1,4 +1,4 @@
-/*Функция для нормализации email домена Google.*/
+/*Утилита для нормализации email домена Google.*/
 export const normalizeEmail = (email: string): string => {
   /*Приводим email к нижнему регистру.*/
   let [localPart, domain] = email.toLowerCase().split('@');
