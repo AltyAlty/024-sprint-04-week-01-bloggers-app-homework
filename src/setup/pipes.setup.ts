@@ -36,11 +36,13 @@ export function pipesSetup(app: INestApplication): void {
         /*Перебираем ошибки валидации.*/
         const errorsForResponse: ErrorsMessagesType = errors.map((error: ValidationError): ErrorMessageType => {
           /*Так как включена опция "stopAtFirstError: true", то для каждого поля будет только одна ошибка. Внутри
-          свойства "constraints" объекта с ошибкой валидации лежит пара "Название декоратора: Текст ошибки".*/
+          свойства "constraints" объекта с ошибкой валидации лежат пары "Название декоратора: Текст ошибки", но в данном
+          случае будет только одна такая пара.*/
           const constraints: Record<string, string> = error.constraints || {};
           /*Получаем имя декоратора валидации, в котором была ошибка.*/
           const validationDecoratorName: string = Object.keys(constraints)[0];
-          /*Формируем объект ошибки в формате "ErrorMessageType".*/
+          /*Формируем объект ошибки в формате "ErrorMessageType". Свойство "error.property" содержит название поля, на
+          котором произошла ошибка валидации.*/
           return { field: error.property, message: constraints[validationDecoratorName] };
         });
 
